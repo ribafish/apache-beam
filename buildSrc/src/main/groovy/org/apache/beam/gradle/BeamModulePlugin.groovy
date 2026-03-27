@@ -542,20 +542,6 @@ class BeamModulePlugin implements Plugin<Project> {
     // via JavaNatureConfiguration per project. It is disabled by default until we can
     // make all of our deps good.
     project.apply plugin: "ca.cutterslade.analyze"
-    project.tasks.matching { it.name in ["analyzeDependencies", "analyzeClassesDependencies", "analyzeTestClassesDependencies"] }
-        .configureEach {
-          // The dependency analysis plugin fingerprints compiled classes using absolute paths,
-          // which makes these tasks non-relocatable across different checkout locations.
-          outputs.doNotCacheIf("Non-relocatable absolute path inputs") { true }
-        }
-
-    project.pluginManager.withPlugin("org.javacc.javacc") {
-      project.tasks.matching { it.name == "compileJavacc" }.configureEach {
-        // The JavaCC plugin models the grammar source as an @InputFile with absolute-path sensitivity,
-        // so cross-checkout cache reuse is not safe until the plugin supports relocatable inputs.
-        outputs.doNotCacheIf("Non-relocatable absolute path inputs") { true }
-      }
-    }
 
     // Adds a taskTree task that prints task dependency tree report to the console.
     // Useful for investigating build issues.
