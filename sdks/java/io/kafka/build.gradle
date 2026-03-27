@@ -126,6 +126,7 @@ kafkaVersions.each {kv ->
     group = "Verification"
     description = "Runs KafkaIO tests with Kafka clients API $kv.value"
     outputs.upToDateWhen { false }
+    outputs.doNotCacheIf("Forced rerun") { true }
     testClassesDirs = sourceSets.test.output.classesDirs
     classpath =  configurations."kafkaVersion${kv.key}" + sourceSets.test.runtimeClasspath
     systemProperty "beam.target.kafka.version", kv.value

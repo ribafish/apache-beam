@@ -125,6 +125,7 @@ task integrationTest(type: Test, dependsOn: processTestResources) {
 
   // Disable Gradle cache: these ITs interact with live service that should always be considered "out of date"
   outputs.upToDateWhen { false }
+  outputs.doNotCacheIf("Forced rerun") { true }
 
   include '**/*IT.class'
   classpath = sourceSets.test.runtimeClasspath

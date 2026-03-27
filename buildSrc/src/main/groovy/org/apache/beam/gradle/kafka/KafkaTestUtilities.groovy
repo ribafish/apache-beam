@@ -32,6 +32,7 @@ class KafkaTestUtilities {
       group = "Verification"
       description = "Runs KafkaIO IT tests with Kafka clients API $delimited"
       outputs.upToDateWhen { false }
+      outputs.doNotCacheIf("Forced rerun") { true }
       testClassesDirs = runningProject.findProject(":sdks:java:io:kafka").sourceSets.test.output.classesDirs
       classpath = runningProject.sourceSets.test.runtimeClasspath + kafkaioProject.configurations."kafkaVersion$undelimited" + kafkaioProject.sourceSets.test.runtimeClasspath
       systemProperty "beam.target.kafka.version", delimited

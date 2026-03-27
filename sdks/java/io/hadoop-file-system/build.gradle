@@ -106,6 +106,7 @@ hadoopVersions.each { kv ->
     description = "Runs Hadoop file system tests with Hadoop version $kv.value"
     classpath = configurations."hadoopVersion$kv.key" + sourceSets.test.runtimeClasspath
     outputs.upToDateWhen { false }
+    outputs.doNotCacheIf("Forced rerun") { true }
     include '**/*Test.class'
   }
 }

@@ -130,6 +130,7 @@ avroVersions.each { k, v ->
     group = "Verification"
     description = "Runs Avro extension tests with Avro version $v"
     outputs.upToDateWhen { false }
+    outputs.doNotCacheIf("Forced rerun") { true }
     classpath = sourceSets."avro$k".runtimeClasspath
     systemProperty "beam.target.avro.version", v
 

@@ -81,6 +81,7 @@ task shadowJarTest(type: Test, dependsOn: ":sdks:java:extensions:sql:jdbc:shadow
 
   // Disable Gradle cache (it should not be used because the IT's won't run).
   outputs.upToDateWhen { false }
+  outputs.doNotCacheIf("Forced rerun") { true }
 
   systemProperty "driver.jar", configurations.shadowTestRuntimeClasspath[1]
 
@@ -97,6 +98,7 @@ task endToEndTest(type: Test) {
 
   // Disable Gradle cache (it should not be used because the IT's won't run).
   outputs.upToDateWhen { false }
+  outputs.doNotCacheIf("Forced rerun") { true }
 
   def pipelineOptions = [
           "--project=${gcpProject}",

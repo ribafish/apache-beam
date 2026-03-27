@@ -61,6 +61,7 @@ shadowJar {
   }
   mergeServiceFiles()
   outputs.upToDateWhen { false }
+  outputs.doNotCacheIf("Forced rerun") { true }
 }
 
 description = "Apache Beam :: SDKs :: Java :: IO :: Expansion Service"

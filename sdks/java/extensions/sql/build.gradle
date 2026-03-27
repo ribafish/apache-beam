@@ -228,6 +228,7 @@ task integrationTest(type: Test) {
 
   // Disable Gradle cache (it should not be used because the IT's won't run).
   outputs.upToDateWhen { false }
+  outputs.doNotCacheIf("Forced rerun") { true }
 
   def pipelineOptions = [
           "--project=${gcpProject}",

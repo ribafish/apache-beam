@@ -155,6 +155,7 @@ task integrationTest(type: Test) {
 
     // Disable Gradle cache: these ITs interact with live service that should always be considered "out of date"
     outputs.upToDateWhen { false }
+    outputs.doNotCacheIf("Forced rerun") { true }
 
     include '**/*IT.class'
     // BQ metastore catalog doesn't support java 8
@@ -190,6 +191,7 @@ task dataflowIntegrationTest(type: Test) {
 
     // Disable Gradle cache: these ITs interact with live service that should always be considered "out of date"
     outputs.upToDateWhen { false }
+    outputs.doNotCacheIf("Forced rerun") { true }
 
     filter {
         includeTestsMatching 'org.apache.beam.sdk.io.iceberg.catalog.BigQueryMetastoreCatalogIT.testRead'
@@ -223,6 +225,7 @@ task loadTest(type: Test) {
 
     // Disable Gradle cache: these ITs interact with live service that should always be considered "out of date"
     outputs.upToDateWhen { false }
+    outputs.doNotCacheIf("Forced rerun") { true }
 
     include '**/*LT.class'
 
