@@ -147,8 +147,9 @@ task needsRunnerTests(type: Test) {
     excludeCategories "org.apache.beam.sdk.testing.UsesExternalService"
     excludeCategories 'org.apache.beam.sdk.testing.UsesBundleFinalizer'
   }
+  outputs.upToDateWhen { false }
+  outputs.doNotCacheIf("Forced rerun") { true }
   testLogging {
-    outputs.upToDateWhen {false}
     showStandardStreams = true
   }
 }
