@@ -2183,6 +2183,7 @@ class BeamModulePlugin implements Plugin<Project> {
 
         // Disable Gradle cache (it should not be used because the IT's won't run).
         outputs.upToDateWhen { false }
+        outputs.doNotCacheIf("Forced rerun") { true }
 
         include "**/*IT.class"
 
@@ -3106,6 +3107,7 @@ class BeamModulePlugin implements Plugin<Project> {
         // the package is fully installed.
         outputs.dirs(project.ext.envdir)
         outputs.upToDateWhen { false }
+        outputs.doNotCacheIf("Forced rerun") { true }
       }
 
       project.ext.pythonSdkDeps = project.files(

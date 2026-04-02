@@ -43,7 +43,7 @@ def buildTask = tasks.named("build") {
     // goPrepare is a task registered in applyGoNature.
     dependsOn("goPrepare")
     // Allow Go to manage the caching, not gradle.
-    outputs.cacheIf { false }
+    outputs.doNotCacheIf("Go manages its own caching") { true }
     outputs.upToDateWhen { false }
     doLast {
         exec {

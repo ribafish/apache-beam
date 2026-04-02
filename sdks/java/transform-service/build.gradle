@@ -51,4 +51,5 @@ dependencies {
 
 shadowJar {
   outputs.upToDateWhen { false }
+  outputs.doNotCacheIf("Forced rerun") { true }
 }

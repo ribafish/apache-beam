@@ -43,7 +43,8 @@ dependencies {
 
 tasks.test {
     var prismBuildTask = dependsOn(':runners:prism:build')
-    systemProperty 'prism.buildTarget', prismBuildTask.project.property('buildTarget').toString()
+    var prismBinaryFile = prismBuildTask.project.property('buildTarget').asFile
+    jvmArgumentProviders.add(new PrismBuildTargetProvider(prismBinaryFile))
 }
 
 // Below is configuration to support running the Java Validates Runner tests.
@@ -188,14 +189,14 @@ def createPrismValidatesRunnerTask = { name, environmentType ->
     classpath = configurations.validatesRunner
 
     var prismBuildTask = dependsOn(':runners:prism:build')
-    systemProperty "beamTestPipelineOptions", JsonOutput.toJson([
+    var prismBinaryFile = prismBuildTask.project.property('buildTarget').asFile
+    jvmArgumentProviders.add(new PrismPipelineOptionsProvider(prismBinaryFile, [
         "--runner=TestPrismRunner",
         "--experiments=beam_fn_api",
         "--defaultEnvironmentType=${environmentType}",
         "--prismLogLevel=warn",
-        "--prismLocation=${prismBuildTask.project.property('buildTarget').toString()}",
         "--enableWebUI=false",
-    ])
+    ]))
     testClassesDirs = files(project(":sdks:java:core").sourceSets.test.output.classesDirs)
     useJUnit {
       includeCategories 'org.apache.beam.sdk.testing.ValidatesRunner'
@@ -224,13 +225,13 @@ tasks.register("validatesRunnerSickbay", Test) {
     description "Validates Prism local runner (Sickbay Tests)"
 
     var prismBuildTask = dependsOn(':runners:prism:build')
-    systemProperty "beamTestPipelineOptions", JsonOutput.toJson([
+    var prismBinaryFile = prismBuildTask.project.property('buildTarget').asFile
+    jvmArgumentProviders.add(new PrismPipelineOptionsProvider(prismBinaryFile, [
         "--runner=TestPrismRunner",
         "--experiments=beam_fn_api",
         "--enableWebUI=false",
         "--prismLogLevel=warn",
-        "--prismLocation=${prismBuildTask.project.property('buildTarget').toString()}"
-    ])
+    ]))
 
   classpath = configurations.validatesRunner
   testClassesDirs = files(project(":sdks:java:core").sourceSets.test.output.classesDirs)
@@ -249,4 +250,43 @@ task prismDockerValidatesRunner {
 
 task prismLoopbackValidatesRunner {
   dependsOn createPrismValidatesRunnerTask("prismLoopbackValidatesRunnerTests", "LOOPBACK")
+}
+
+/**
+ * Passes -DbeamTestPipelineOptions=<json> to the test JVM, appending
+ * --prismLocation with a relocatable file input for build cache correctness.
+ */
+class PrismPipelineOptionsProvider implements CommandLineArgumentProvider {
+    @InputFile
+    @PathSensitive(PathSensitivity.RELATIVE)
+    final File prismBinary
+
+    @Input
+    final List<String> options
+
+    PrismPipelineOptionsProvider(File prismBinary, List<String> options) {
+        this.prismBinary = prismBinary
+        this.options = options
+    }
+
+    @Override
+    Iterable<String> asArguments() {
+        def allOptions = options + ["--prismLocation=${prismBinary.absolutePath}".toString()]
+        return ["-DbeamTestPipelineOptions=${JsonOutput.toJson(allOptions)}".toString()]
+    }
+}
+
+class PrismBuildTargetProvider implements CommandLineArgumentProvider {
+    @InputFile
+    @PathSensitive(PathSensitivity.RELATIVE)
+    final File prismBinary
+
+    PrismBuildTargetProvider(File prismBinary) {
+        this.prismBinary = prismBinary
+    }
+
+    @Override
+    Iterable<String> asArguments() {
+        return ["-Dprism.buildTarget=${prismBinary.absolutePath}".toString()]
+    }
 }

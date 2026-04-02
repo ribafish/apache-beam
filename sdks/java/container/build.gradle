@@ -62,7 +62,7 @@ licenseReport {
 
 task pullLicenses(type: Exec) {
   dependsOn generateLicenseReport
-  generateLicenseReport.outputs.cacheIf { false }
+  generateLicenseReport.outputs.doNotCacheIf("License report is not cacheable") { true }
 
   commandLine './license_scripts/license_script.sh', "python${project.ext.pythonVersion}"
   outputs.dir('build/target/third_party_licenses')

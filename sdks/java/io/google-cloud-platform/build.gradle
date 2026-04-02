@@ -192,6 +192,7 @@ task integrationTest(type: Test, dependsOn: processTestResources) {
 
   // Disable Gradle cache: these ITs interact with live service that should always be considered "out of date"
   outputs.upToDateWhen { false }
+  outputs.doNotCacheIf("Forced rerun") { true }
 
   include '**/*IT.class'
   exclude '**/BigQueryIOReadIT.class'
@@ -233,6 +234,7 @@ task integrationTestKms(type: Test) {
 
   // Disable Gradle cache: these ITs interact with live service that should always be considered "out of date"
   outputs.upToDateWhen { false }
+  outputs.doNotCacheIf("Forced rerun") { true }
 
   include '**/*IT.class'
   maxParallelForks 4
@@ -264,6 +266,7 @@ task bigQueryEarlyRolloutIntegrationTest(type: Test, dependsOn: processTestResou
   ])
 
   outputs.upToDateWhen { false }
+  outputs.doNotCacheIf("Forced rerun") { true }
 
   // export and direct read
   include '**/BigQueryToTableIT.class'

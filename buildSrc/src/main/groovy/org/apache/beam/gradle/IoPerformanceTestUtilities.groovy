@@ -29,6 +29,7 @@ class IoPerformanceTestUtilities {
       group = "Verification"
       description = "Runs IO Performance Test for $testClass"
       outputs.upToDateWhen { false }
+      outputs.doNotCacheIf("Forced rerun") { true }
       testClassesDirs = runningProject.findProject(":it:${module}").sourceSets.test.output.classesDirs
       classpath =  runningProject.sourceSets.test.runtimeClasspath + runningProject.findProject(":it:${module}").sourceSets.test.runtimeClasspath
 

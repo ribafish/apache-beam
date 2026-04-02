@@ -96,6 +96,7 @@ subprojects {
 
   test {
     outputs.upToDateWhen { false }
+    outputs.doNotCacheIf("Forced rerun") { true }
     afterTest { TestDescriptor test, TestResult result ->
       if (result.resultType == TestResult.ResultType.FAILURE) {
         def message = result.exception?.message ?: "Wrong answer"

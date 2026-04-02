@@ -74,6 +74,7 @@ task integrationTest(type: Test) {
 
     // Disable Gradle cache: these ITs interact with live service that should always be considered "out of date"
     outputs.upToDateWhen { false }
+    outputs.doNotCacheIf("Forced rerun") { true }
 
     include '**/*IT.class'
     maxParallelForks 4

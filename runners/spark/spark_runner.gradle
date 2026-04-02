@@ -268,6 +268,7 @@ def applyBatchValidatesRunnerSetup = { Test it ->
   group = "Verification"
   // Disable gradle cache
   it.outputs.upToDateWhen { false }
+  it.outputs.doNotCacheIf("Forced rerun") { true }
   it.jvmArgs += sparkTestJvmArgs()
   it.jvmArgs '-Xmx3g'
 
@@ -334,6 +335,7 @@ def validatesRunnerStreaming = tasks.register("validatesRunnerStreaming", Test) 
   group = "Verification"
   // Disable gradle cache
   outputs.upToDateWhen { false }
+  outputs.doNotCacheIf("Forced rerun") { true }
   systemProperties sparkTestProperties(["--enableSparkMetricSinks": "true"])
   jvmArgs += sparkTestJvmArgs()
 
@@ -395,6 +397,7 @@ tasks.register("validatesStructuredStreamingRunnerBatch", Test) {
   group = "Verification"
   // Disable gradle cache
   outputs.upToDateWhen { false }
+  outputs.doNotCacheIf("Forced rerun") { true }
   systemProperties sparkTestProperties(["--runner":"SparkStructuredStreamingRunner", "--testMode":"true"])
   // Register various other classes used in tests
   systemProperty 'spark.kryo.classesToRegister',
@@ -480,6 +483,7 @@ tasks.register("examplesIntegrationTest", Test) {
   group = "Verification"
   // Disable gradle cache
   outputs.upToDateWhen { false }
+  outputs.doNotCacheIf("Forced rerun") { true }
   systemProperties sparkTestProperties([
       "--tempLocation": "${tempLocation}",
       "--tempRoot"    : "${tempLocation}",

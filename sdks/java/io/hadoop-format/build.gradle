@@ -157,6 +157,7 @@ hadoopVersions.each {kv ->
   task "runHadoopFormatIO${kv.key}ElasticIT"(type: Test, group: "Verification") {
     description = "Runs HadoopFormatIOElasticIT with Hadoop '${kv.value}'"
     outputs.upToDateWhen { false }
+    outputs.doNotCacheIf("Forced rerun") { true }
     testClassesDirs = sourceSets.test.output.classesDirs
     classpath = configurations."hadoopVersion$kv.key" + sourceSets.test.runtimeClasspath
     def pipelineOptions = JsonOutput.toJson(["--withTestcontainers=true"])
@@ -169,6 +170,7 @@ hadoopVersions.each {kv ->
   task "runHadoopFormatIO${kv.key}IT"(type: Test, group: "Verification") {
     description = "Runs HadoopFormatIOIT with Hadoop '${kv.value}'"
     outputs.upToDateWhen { false }
+    outputs.doNotCacheIf("Forced rerun") { true }
     testClassesDirs = sourceSets.test.output.classesDirs
     classpath = configurations."hadoopVersion$kv.key" + sourceSets.test.runtimeClasspath
 
@@ -191,6 +193,7 @@ hadoopVersions.each{kv ->
     description = "Runs HadoopFormatIO tests with Hadoop '${kv.value}'"
     classpath = configurations."hadoopVersion$kv.key" + sourceSets.test.runtimeClasspath
     outputs.upToDateWhen { false }
+    outputs.doNotCacheIf("Forced rerun") { true }
     include '**/*Test.class'
     // Cassandra test cannot run in parallel
     exclude '**/HadoopFormatIOCassandraTest.class'

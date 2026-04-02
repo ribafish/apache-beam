@@ -59,4 +59,5 @@ shadowJar {
         attributes(["Multi-Release": true])
     }
   outputs.upToDateWhen { false }
+  outputs.doNotCacheIf("Forced rerun") { true }
 }

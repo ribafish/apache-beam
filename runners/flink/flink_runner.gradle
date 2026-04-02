@@ -301,6 +301,7 @@ def createValidatesRunnerTask(Map m) {
     group = "Verification"
     // Disable gradle cache
     outputs.upToDateWhen { false }
+    outputs.doNotCacheIf("Forced rerun") { true }
     def runnerType = config.streaming ? "streaming" : "batch"
     description = "Validates the ${runnerType} runner"
     def pipelineOptionsArray = ["--runner=TestFlinkRunner",
@@ -429,6 +430,7 @@ tasks.register("examplesIntegrationTest", Test) {
   group = "Verification"
   // Disable gradle cache
   outputs.upToDateWhen { false }
+  outputs.doNotCacheIf("Forced rerun") { true }
   def pipelineOptionsArray = ["--runner=TestFlinkRunner",
                               "--parallelism=2",
                               "--tempLocation=${tempLocation}",
